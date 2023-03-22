@@ -5,8 +5,12 @@
 package modelo;
 
 import iu.VentanaPrincipal;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.border.Border;
 
 /**
  * @author a22davidil
@@ -199,7 +203,7 @@ public class Xogo {
         }
         return true;
     }
-
+    
     public int getLadoCadrado() {
         return ladoCadrado;
     }
@@ -262,5 +266,39 @@ public class Xogo {
 
     public void setVentana(VentanaPrincipal ventana) {
         this.ventana = ventana;
+    }
+    
+    public void engadirLineas(){
+        Iterator <Cadrado> actualizarCadrados = cadradosChan.iterator();
+        while(actualizarCadrados.hasNext()){
+            Cadrado temporal = actualizarCadrados.next();
+            ventana.borrarCadrado(temporal.getLblCadrado());
+            temporal.setY(temporal.getY() - ladoCadrado);
+            ventana.pintarCadrado(temporal.getLblCadrado());
+        }
+        boolean cadradoEngadido = false;
+        for (int contador = 0; contador<maxX; contador= contador+ladoCadrado){
+            double aleatorio = Math.random();
+            if(aleatorio>0.7){
+                Cadrado engadido = new Cadrado(contador, maxY-ladoCadrado, Color.LIGHT_GRAY, ladoCadrado);
+                pintarCadradoXogo(engadido);
+                cadradoEngadido = true;
+            }
+            else if(contador+ladoCadrado==maxX && !cadradoEngadido){
+                contador = 0;
+            }
+        }
+    }
+
+    private void pintarCadradoXogo(Cadrado engadido) {
+        Border borde = BorderFactory.createLineBorder(Color.black);
+        engadido.setLblCadrado(new JLabel());
+        engadido.getLblCadrado().setBorder(borde);
+        engadido.getLblCadrado().setBackground(engadido.getCorRecheo());
+        engadido.getLblCadrado().setOpaque(true);
+        engadido.getLblCadrado().setSize(ladoCadrado, ladoCadrado);
+        engadido.getLblCadrado().setLocation(engadido.getX(), engadido.getY());
+        cadradosChan.add(engadido);
+        ventana.pintarCadrado(engadido.getLblCadrado());
     }
 }
