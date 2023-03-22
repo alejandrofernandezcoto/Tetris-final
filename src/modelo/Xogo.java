@@ -288,6 +288,7 @@ public class Xogo {
                 contador = 0;
             }
         }
+        chocarFichaCoChan();
     }
 
     private void pintarCadradoXogo(Cadrado engadido) {
