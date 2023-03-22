@@ -276,20 +276,16 @@ public class Xogo {
             temporal.setY(temporal.getY() - ladoCadrado);
             ventana.pintarCadrado(temporal.getLblCadrado());
         }
-        System.out.println("Actualizado");
         boolean cadradoEngadido = false;
         for (int contador = 0; contador<maxX; contador= contador+ladoCadrado){
             double aleatorio = Math.random();
-            if(aleatorio>0.5){
-                Cadrado engadido = new Cadrado(contador, maxY, Color.LIGHT_GRAY, ladoCadrado);
+            if(aleatorio>0.7){
+                Cadrado engadido = new Cadrado(contador, maxY-ladoCadrado, Color.LIGHT_GRAY, ladoCadrado);
                 pintarCadradoXogo(engadido);
                 cadradoEngadido = true;
-                
-                System.out.println("Cadrado engadido");
             }
             else if(contador+ladoCadrado==maxX && !cadradoEngadido){
                 contador = 0;
-                System.out.println("Reinicio");
             }
         }
     }

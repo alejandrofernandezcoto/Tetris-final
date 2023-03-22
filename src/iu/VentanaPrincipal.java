@@ -27,7 +27,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private int horas = 0;
     private int dificultad = 1;
     private int caidaFicha;
-    private int aumento = 2;
     private ArrayList<Integer> nivelesAlcanzados = new ArrayList();
 
 
@@ -77,10 +76,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e) {
             centesimas++;
             caidaFicha++;
+            mostrarNumeroLinas();
             if (centesimas == 100) {
                 segundos++;
                 centesimas = 0;
-                mostrarNumeroLinas();
             }
             if (comprobarCaida()) {
                 xogo.moverFichaAbaixo();
@@ -119,9 +118,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }
     
     private void nuevosNivelesAlcanzados(int nivel){
-        while(nivel>0 && dificultad<15){
+        while(nivel>0 && dificultad+2<=15){
             if (nivel % 5 == 0 && !nivelesAlcanzados.contains(nivel)) {
-                dificultad += aumento;
+                dificultad += 2;
             }
             if(!nivelesAlcanzados.contains(nivel)){
                 nivelesAlcanzados.add(nivel);
@@ -405,7 +404,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_pausaActionPerformed
 
     private void iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarActionPerformed
-
         iniciarPartida();
     }//GEN-LAST:event_iniciarActionPerformed
 
@@ -466,17 +464,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonFacilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFacilActionPerformed
         dificultad=1;
-        aumento = 2;
     }//GEN-LAST:event_botonFacilActionPerformed
 
     private void botonMedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMedioActionPerformed
         dificultad = 3;
-        aumento = 2;
     }//GEN-LAST:event_botonMedioActionPerformed
 
     private void botonDificilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDificilActionPerformed
         dificultad = 5;
-        aumento = 3;
     }//GEN-LAST:event_botonDificilActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
