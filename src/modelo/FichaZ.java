@@ -51,11 +51,13 @@ public class FichaZ extends Ficha {
     }
 
     private boolean comprobar1() {
-        return getXogo().ePosicionValida(cadrado0.getX() + getXogo().getLadoCadrado(), cadrado0.getY() - getXogo().getLadoCadrado());
+        return getXogo().ePosicionValida(cadrado0.getX() - getXogo().getLadoCadrado(), cadrado0.getY() + getXogo().getLadoCadrado())
+                && getXogo().ePosicionValida(cadrado3.getX() + getXogo().getLadoCadrado() * 2, cadrado3.getY());
     }
 
     private boolean comprobar0() {
-        return getXogo().ePosicionValida(cadrado0.getX() - getXogo().getLadoCadrado(), cadrado0.getY() + getXogo().getLadoCadrado());
+        return getXogo().ePosicionValida(cadrado2.getX() - getXogo().getLadoCadrado(), cadrado2.getY() - getXogo().getLadoCadrado())
+                && getXogo().ePosicionValida(cadrado3.getX() - getXogo().getLadoCadrado() * 2, cadrado3.getY());
     }
 
     private void rotar1() {

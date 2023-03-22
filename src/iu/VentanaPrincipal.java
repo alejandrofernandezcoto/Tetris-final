@@ -4,12 +4,13 @@
  */
 package iu;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import modelo.Xogo;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.Timer;
 
 /**
@@ -26,23 +27,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private int horas = 0;
     private int dificultad = 1;
     private int caidaFicha;
+    private int aumento = 2;
+    private ArrayList<Integer> nivelesAlcanzados = new ArrayList();
 
 
     /**
      * Creates new form VentanaPrincipal
      */
-    public class Imagen extends javax.swing.JPanel {
-
-        public Imagen() {
-            this.setSize(xogo.getMaxX(), xogo.getMaxY());
-        }
-
-        public void paint(Graphics grafico) {
-            ImageIcon Img = new ImageIcon(getClass().getResource("/Images/tetris4_transparente.png"));
-            grafico.drawImage(Img.getImage(), 0, 0, 320, 640, null);
-
-        }
-    }
 
     private void Tiempo() {
         String texto = (minutos <= 9 ? "0" : "") + minutos + ":"
@@ -54,7 +45,23 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public VentanaPrincipal() {
 
         initComponents();
-        
+        botonMedio.setSelected(true);
+        declararImagenes();
+    }
+    
+        private void declararImagenes() {
+        botonFacil.setSelectedIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/facil_verde.png")));
+        botonFacil.setIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/facil_negro.png")));
+        botonMedio.setSelectedIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/medio_amarillo.png")));
+        botonMedio.setIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/medio_negro.png")));
+        botonDificil.setSelectedIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/dificil_rojo.png")));
+        botonDificil.setIcon(new javax.swing.ImageIcon(getClass()
+                .getResource("/Images/dificil_negro.png")));
     }
     
     public void mostrarNumeroLinas() {
@@ -75,13 +82,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 centesimas = 0;
                 mostrarNumeroLinas();
             }
-            if(caidaFicha == 85 - 5*dificultad){
+            if (comprobarCaida()) {
                 xogo.moverFichaAbaixo();
-                caidaFicha=0;
+                caidaFicha = 0;
+                aumentarVelocidad();
+            }
+            if (dificultad>=5 && segundos== 30 && centesimas == 00){
+                xogo.engadirLineas();
             }
             if (segundos == 60) {
                 minutos++;
                 segundos = 0;
+                if(dificultad >= 5){
+                    xogo.engadirLineas();
+                }
             }
             if (minutos == 60) {
                 horas++;
@@ -90,8 +104,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
            
             Tiempo();
         }
+
     };
 
+        
+    private boolean comprobarCaida() {
+        return caidaFicha == 85 - 5 * dificultad;
+    }
+    
+    private void aumentarVelocidad() {
+        if (!nivelAlcanzado(xogo.getNumeroLineas())) {
+            nuevosNivelesAlcanzados(xogo.getNumeroLineas());
+        }
+    }
+    
+    private void nuevosNivelesAlcanzados(int nivel){
+        while(nivel>0 && dificultad<15){
+            if (nivel % 5 == 0 && !nivelesAlcanzados.contains(nivel)) {
+                dificultad += aumento;
+            }
+            if(!nivelesAlcanzados.contains(nivel)){
+                nivelesAlcanzados.add(nivel);
+            }
+            nivel--;
+        }
+        if(dificultad>15){
+            dificultad=15;
+        }
+    }
+
+    private boolean nivelAlcanzado(int nivel) {
+        Iterator<Integer> niveles = nivelesAlcanzados.iterator();
+        while (niveles.hasNext()) {
+            if (niveles.next() == nivel) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void pintarCadrado(JLabel lblCadrado) {
         panelXogo.add(lblCadrado);
         panelXogo.updateUI();
@@ -368,14 +419,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         xogo.xenerarNovaFicha();
         xogo.setPausa(false);
         panelXogo.setFocusable(true);
+        panelXogo.setVisible(true);
+        cajaPuntuación.setVisible(true);
+        cajaTiempo.setVisible(true);
+        lblLblnumlinas.setVisible(true);
+        temporizador.setVisible(true);
+        pausa.setVisible(true);
         panelXogo.requestFocus();
         tiempo = new Timer(10, acciones);
         centesimas = 0;
         segundos = 0;
         minutos = 0;
         horas = 0;
-        Imagen Imagen = new Imagen();
-        panelXogo.add(Imagen);
+        panelXogo.add(labelFondo);
         tiempo.start();
     }
 
@@ -409,36 +465,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_panelXogoKeyPressed
 
     private void botonFacilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonFacilActionPerformed
-        botonFacil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (6).png")));
-        botonMedio.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (7).png")));
-        botonDificil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (9).png")));
         dificultad=1;
+        aumento = 2;
     }//GEN-LAST:event_botonFacilActionPerformed
 
     private void botonMedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMedioActionPerformed
-        botonMedio.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (8).png")));
-        botonFacil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (5).png")));
-        botonDificil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (9).png")));
-        
-      
-        
+        dificultad = 3;
+        aumento = 2;
     }//GEN-LAST:event_botonMedioActionPerformed
 
     private void botonDificilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonDificilActionPerformed
-        botonFacil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (5).png")));
-        botonMedio.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (7).png")));
-        botonDificil.setIcon(new javax.swing.ImageIcon(getClass()
-                .getResource("/Images/scorre (10).png")));
-        
-     
+        dificultad = 5;
+        aumento = 3;
     }//GEN-LAST:event_botonDificilActionPerformed
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
